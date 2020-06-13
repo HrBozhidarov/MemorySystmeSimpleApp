@@ -1,9 +1,13 @@
 namespace MemorySystemApp
 {
+    using System.Reflection;
     using System.Text;
 
     using MemorySystemApp.Data;
     using MemorySystemApp.Data.Models;
+    using MemorySystemApp.Infrastructures;
+    using MemorySystemApp.Infrastructures.AutomapperSettings;
+    using MemorySystemApp.Services.Identity;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
@@ -12,7 +16,6 @@ namespace MemorySystemApp
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
 
     public class Startup
@@ -30,11 +33,21 @@ namespace MemorySystemApp
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services
-                .AddIdentity<User, IdentityRole>()
+                .AddIdentity<User, IdentityRole>(options =>
+                {
+                    options.Password.RequiredLength = 3;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
                 .AddEntityFrameworkStores<MemorySystemDbContext>();
 
+            // Application services
+            services.AddTransient<IIdentityService, IdentityService>();
+
             // configure strongly typed settings objects
-            var applicationSettingsSectionConfiguration = Configuration.GetSection("ApplicationSettings");
+            var applicationSettingsSectionConfiguration = Configuration.GetSection(nameof(ApplicationSettings));
             services.Configure<ApplicationSettings>(applicationSettingsSectionConfiguration);
 
             // configure jwt authentication
@@ -64,10 +77,8 @@ namespace MemorySystemApp
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDatabaseErrorPage();
-            }
+            // Config
+            AutoMapperConfig.RegisterMappings(typeof(Startup).GetTypeInfo().Assembly);
 
             app.UseRouting();
 
@@ -81,6 +92,8 @@ namespace MemorySystemApp
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.ApplyMigration();
         }
     }
 }
