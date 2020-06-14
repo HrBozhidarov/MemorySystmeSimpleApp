@@ -11,6 +11,7 @@ import { NavigationBarComponent } from './components/navigation-bar/navigation-b
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { IdentityService } from './services/identity/identity.service';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { IdentityService } from './services/identity/identity.service';
     RegisterComponent,
     NavigationBarComponent,
     HomeComponent,
-    FooterComponent
+    FooterComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

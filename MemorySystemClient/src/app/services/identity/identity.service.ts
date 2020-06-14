@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
+
+import { URLS } from 'src/app/constants/constants';
 
 @Injectable()
 export class IdentityService {
-  private readonly domainUrl = 'https://localhost:44353/';
-  private readonly registerUrl = this.domainUrl + 'identity/register';
-  private readonly loginUrl = this.domainUrl + 'identity/login';
+  private readonly registerUrl = URLS.DOMAIN_URL + 'identity/register';
+  private readonly loginUrl = URLS.DOMAIN_URL + 'identity/login';
 
   constructor(private http: HttpClient) { }
 

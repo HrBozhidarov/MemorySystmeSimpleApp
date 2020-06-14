@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
+import { IdentityService } from 'src/app/services/identity/identity.service';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -10,7 +13,10 @@ export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
   public submitted: boolean = false;
   
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder, 
+    private identityService: IdentityService,
+    private router: Router) { }
 
   ngOnInit() {
     this.registerForm = this.fb.group({
@@ -29,6 +35,8 @@ export class RegisterComponent implements OnInit {
         return;
     }
 
-    alert('SUCCESS!! :-)')
+    this.identityService.register(this.registerForm.value).subscribe(() => {
+      this.router.navigate(['/login']);
+    })
   }
 }
