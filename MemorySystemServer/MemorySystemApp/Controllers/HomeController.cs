@@ -8,7 +8,7 @@
         [Authorize]
         public IActionResult GET()
         {
-            return Ok("Works");
+            return Ok();
         }
     }
 }

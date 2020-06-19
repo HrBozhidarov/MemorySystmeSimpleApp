@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { URLS } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-home',
@@ -7,8 +10,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private identityService: HttpClient) { }
 
   ngOnInit() {
+    this.identityService.get(URLS.DOMAIN_URL+'home').subscribe(data => data);
   }
 }

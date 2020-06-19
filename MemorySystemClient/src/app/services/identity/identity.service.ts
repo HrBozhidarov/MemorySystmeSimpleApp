@@ -24,6 +24,10 @@ export class IdentityService {
     localStorage.setItem("token", token);
   }
 
+  public logout() {
+    localStorage.removeItem("token");
+  }
+
   public getToken(): any {
     return localStorage.getItem("token");
   }

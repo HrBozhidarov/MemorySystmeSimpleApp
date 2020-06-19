@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -12,6 +12,11 @@ import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { IdentityService } from './services/identity/identity.service';
 import { HeaderComponent } from './components/header/header.component';
+
+import { TokenInterceptor } from './interceptors/token-Interceptor';
+import { ErrorInterceptor } from './interceptors/error-interceptor';
+import { AuthorizedGuard } from './guards/authorized.guard';
+import { ShareAuthService } from './share/services/share-auth-service';
 
 @NgModule({
   declarations: [
@@ -30,7 +35,21 @@ import { HeaderComponent } from './components/header/header.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [IdentityService],
+  providers: [
+    ShareAuthService,
+    IdentityService,
+    AuthorizedGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
