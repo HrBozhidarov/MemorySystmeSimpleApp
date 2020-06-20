@@ -22,6 +22,8 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<CategoryPicture>().HasKey(e => new { e.CategoryId, e.PictureId });
+
             builder.Entity<CategoryPicture>()
                 .HasOne(e => e.Category)
                 .WithMany(e => e.CategoryPictures)
