@@ -1,3 +1,4 @@
+import { Injectable } from "@angular/core";
 import { HttpInterceptor, HttpRequest, HttpEvent, HttpHandler, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
@@ -8,11 +9,16 @@ import { Router } from '@angular/router';
 import { ShareAuthService } from '../share/services/share-auth-service';
 import { IdentityService } from '../services/identity/identity.service';
 
+import { ToastrService } from 'ngx-toastr';
+
+
+@Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
     constructor(
         private router: Router, 
         private shareAuthService: ShareAuthService,
-        private identityService: IdentityService) {}
+        private identityService: IdentityService,
+        private toastrService: ToastrService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request)
@@ -22,6 +28,8 @@ export class ErrorInterceptor implements HttpInterceptor {
 
                     this.router.navigate(['/login']);
                 }
+                this.toastrService.error('Errorrrr!!!!!!!!!');
+
                 return throwError(error);
             }))
     }
