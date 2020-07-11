@@ -14,7 +14,12 @@
     public static class ServiceCollectionExtention
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
-            => services.AddTransient<IIdentityService, IdentityService>();
+        {
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IPicturesService, PicturesService>();
+
+            return services;
+        }
 
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {

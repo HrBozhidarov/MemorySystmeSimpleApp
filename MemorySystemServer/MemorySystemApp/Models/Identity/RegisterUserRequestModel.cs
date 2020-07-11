@@ -2,8 +2,9 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using MemorySystem.Infrastructure.AutomapperSettings;
+
     using MemorySystemApp.Data.Models;
-    using MemorySystemApp.Infrastructures.AutomapperSettings;
 
     public class RegisterUserRequestModel : IMapTo<User>
     {

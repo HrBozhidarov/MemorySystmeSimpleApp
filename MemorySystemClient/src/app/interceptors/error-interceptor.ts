@@ -24,11 +24,11 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(request)
             .pipe(catchError((error: HttpErrorResponse) => {
                 if (error.status === 401) {
+                    this.identityService.logout();
                     this.shareAuthService.updatedDataSelection(this.identityService.isLoggedIn());
-
                     this.router.navigate(['/login']);
                 }
-                this.toastrService.error('Errorrrr!!!!!!!!!');
+                this.toastrService.error('Login In Your Account');
 
                 return throwError(error);
             }))

@@ -1,0 +1,42 @@
+﻿namespace MemorySystemApp.Controllers
+{
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using MemorySystemApp.Infrastructures;
+    using MemorySystemApp.Models.pictures;
+    using MemorySystemApp.Services;
+    using MemorySystemApp.Services.Identity;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    [Authorize]
+    public class UsersController : ApiController
+    {
+        private readonly IPicturesService picturesService;
+
+        public UsersController(IPicturesService picturesService)
+        {
+            this.picturesService = picturesService;
+        }
+
+        //public ActionResult Prifile(string userId)
+        //{
+
+        //}
+
+        [HttpGet]
+        [Route(nameof(MyMemories))]
+        public async Task<ActionResult<Result<IEnumerable<PictureModel>>>> MyMemories()
+        {
+            var a = await this.picturesService.GetOwnPictures(this.User.GetUserId());
+            if (a.IfHaveError)
+            {
+                return NotFound(a);
+            }
+
+            return a;
+        }
+    }
+}

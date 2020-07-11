@@ -20,10 +20,9 @@
         public async Task<ActionResult> Register(RegisterUserRequestModel model)
         {
             var result = await this.identityService.Register(model);
-
-            if (!result.Succeeded)
+            if (result.IfHaveError)
             {
-                return BadRequest();
+                return BadRequest(result);
             }
 
             return Ok(result);
@@ -34,10 +33,9 @@
         public async Task<ActionResult> Login(LoginUserRequestModel model)
         {
             var result = await this.identityService.Login(model);
-
-            if (!result.Succeeded)
+            if (result.IfHaveError)
             {
-                return BadRequest();
+                return BadRequest(result);
             }
 
             return Ok(result);

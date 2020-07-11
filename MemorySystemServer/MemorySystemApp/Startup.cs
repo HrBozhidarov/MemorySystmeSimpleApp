@@ -2,9 +2,10 @@ namespace MemorySystemApp
 {
     using System.Reflection;
 
+    using MemorySystem.Infrastructure.AutomapperSettings;
+
     using MemorySystemApp.Data;
     using MemorySystemApp.Infrastructures;
-    using MemorySystemApp.Infrastructures.AutomapperSettings;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,7 @@ namespace MemorySystemApp
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutoMapperConfig.RegisterMappings(typeof(Startup).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(Assembly.GetExecutingAssembly());
 
             app.UseRouting()
             .UseCors(opt => opt
@@ -42,8 +43,8 @@ namespace MemorySystemApp
                 .AllowAnyHeader())
             .UseAuthentication()
             .UseAuthorization()
-            .UseEndpoints(endpoints => { endpoints.MapControllers(); })
-            .ApplyMigration();
+            .UseEndpoints(endpoints => endpoints.MapControllers())
+            .Initialize();
         }
     }
 }

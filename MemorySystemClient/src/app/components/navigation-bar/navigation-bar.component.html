@@ -1,5 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar w/ text</a>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" [routerLink]="['/home']">
+        <img class="w-h-logo" src="/assets/images/logo.png" />
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -9,12 +11,14 @@
             <li class="nav-item active">
                 <a class="nav-link" [routerLink]="['/home']">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-            </li>
+            <ng-container *ngIf="this.isLogin">
+                <li class="nav-item">
+                    <a class="nav-link" href="/memory-create">Create You Memory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/my-memories">My Memories</a>
+                </li>
+            </ng-container>
         </ul>
         <ul *ngIf="!isLogin" class="navbar-nav">
             <li class="nav-item active">

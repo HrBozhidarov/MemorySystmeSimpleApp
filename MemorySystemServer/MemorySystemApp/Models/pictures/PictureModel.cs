@@ -1,0 +1,32 @@
+﻿namespace MemorySystemApp.Models.pictures
+{
+    using System.Linq;
+
+    using AutoMapper;
+
+    using MemorySystem.Infrastructure.AutomapperSettings;
+
+    using MemorySystemApp.Data.Models;
+
+    public class PictureModel : IMapFrom<Picture>, IHaveCustomMappings
+    {
+        public int Id { get; set; }
+
+        public string Url { get; set; }
+
+        public string Description { get; set; }
+
+        public string Owner { get; set; }
+
+        public bool IsLikedFromCurrentUser { get; set; }
+
+        public int Likes { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Picture, PictureModel>()
+                .ForMember(pd => pd.Likes, opt => opt.MapFrom(p => p.Likes.Count()))
+                .ForMember(pd => pd.Owner, opt => opt.MapFrom(p => p.Owner.UserName));
+        }
+    }
+}

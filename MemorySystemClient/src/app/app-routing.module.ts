@@ -6,6 +6,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 
 import { AuthorizedGuard } from './guards/authorized.guard';
+import { MemoryCreateComponent } from './components/memory/memory-create/memory-create.component';
+import { MyMemoriesComponent } from './components/memory/my-memories/my-memories/my-memories.component';
 
 const routes: Routes = [
   {
@@ -18,7 +20,9 @@ const routes: Routes = [
     component: HomeComponent
   },
   { path: 'login', component: LoginComponent, canActivate: [AuthorizedGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthorizedGuard] }
+  { path: 'register', component: RegisterComponent, canActivate: [AuthorizedGuard] },
+  { path: 'memory-create', component: MemoryCreateComponent }, // add guard
+  { path: 'my-memories', component: MyMemoriesComponent }, // add guard
 ];
 
 @NgModule({

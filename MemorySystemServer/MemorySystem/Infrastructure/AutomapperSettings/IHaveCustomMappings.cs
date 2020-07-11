@@ -1,4 +1,4 @@
-﻿namespace MemorySystemApp.Infrastructures.AutomapperSettings
+﻿namespace MemorySystem.Infrastructure.AutomapperSettings
 {
     using AutoMapper;
 

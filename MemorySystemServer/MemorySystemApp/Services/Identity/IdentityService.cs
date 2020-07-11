@@ -7,8 +7,9 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    using AutoMapper;
+
     using MemorySystemApp.Data.Models;
-    using MemorySystemApp.Infrastructures.AutomapperSettings;
     using MemorySystemApp.Models.Identity;
 
     using Microsoft.AspNetCore.Identity;
@@ -38,16 +39,16 @@
             var user = await this.userManager.FindByNameAsync(model.Username);
             if (user == null)
             {
-                return Result<string>.Failure(new[] { "Username or password are invalid" });
+                return Result<string>.Error("Username or password are invalid");
             }
 
             var validationResult = await this.userManager.CheckPasswordAsync(user, model.Password);
             if (!validationResult)
             {
-                return Result<string>.Failure(new[] { "Username or password are invalid" });
+                return Result<string>.Error("Username or password are invalid");
             }
 
-            return Result<string>.SuccessWith(this.GenerateJwtToken(user));
+            return Result<string>.Success(this.GenerateJwtToken(user));
         }
 
         public async Task<Result<User>> Register(RegisterUserRequestModel model)
@@ -57,15 +58,15 @@
                 throw new NullReferenceException(nameof(model));
             }
 
-            var user = AutoMapperConfig.MapperInstance.Map<User>(model);
+            var user = Mapper.Map<User>(model);
 
             var identityResult = await this.userManager.CreateAsync(user, model.Password);
 
             var errors = identityResult.Errors.Select(e => e.Description);
 
             return identityResult.Succeeded
-                ? Result<User>.SuccessWith(user)
-                : Result<User>.Failure(errors);
+                ? Result<User>.Success(user)
+                : Result<User>.Error(errors.First());
         }
 
         private string GenerateJwtToken(User user)

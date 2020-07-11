@@ -13,7 +13,7 @@
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public CategoryType Type { get; set; }
 
         public IEnumerable<CategoryPicture> CategoryPictures { get; set; }
     }
