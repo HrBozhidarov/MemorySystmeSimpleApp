@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
@@ -16,7 +16,11 @@ export class MemoryService {
     return this.http.post(this.createUrl, payload);
   }
 
-  public myMemories(): Observable<any> {
-    return this.http.get(this.myMemoriesUrl);
+  public myMemories(category: string): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('category', category);
+    debugger;
+
+    return this.http.get(`${this.myMemoriesUrl}`, { params: params });
   }
 }

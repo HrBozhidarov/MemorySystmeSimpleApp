@@ -7,6 +7,7 @@
     using MemorySystemApp.Services.Identity;
     using Microsoft.AspNetCore.Authorization;
 
+    [Authorize]
     public class PicturesController : ApiController
     {
         private readonly IPicturesService picturesService;

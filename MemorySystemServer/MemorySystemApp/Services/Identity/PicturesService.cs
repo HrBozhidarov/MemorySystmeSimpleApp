@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
 
     using MemorySystemApp.Data;
     using MemorySystemApp.Data.Models;
@@ -37,14 +39,9 @@
 
             var entity = Mapper.Map<Picture>(model);
             entity.OwnerId = userId;
+            entity.CategoryId = category.Id;
 
             this.db.Pictures.Add(entity);
-            this.db.CategoryPictures.Add(
-                new CategoryPicture
-                {
-                    CategoryId = category.Id,
-                    PictureId = entity.Id
-                });
 
             db.SaveChanges();
 
@@ -75,28 +72,47 @@
         //    return Result<IEnumerable<PictureModel>>.SuccessWith(pictures);
         //}
 
-        public async Task<Result<IEnumerable<PictureModel>>> GetOwnPictures(string userId)
+        public async Task<Result<IEnumerable<PictureModel>>> GetOwnPictures(string userId, string category)
         {
-            var user = this.db.Users.Include(p => p.Pictures).FirstOrDefault(u => u.Id == userId);
-            if (user == null)
+            Enum.TryParse(category, out CategoryType categoryType);
+            Expression<Func<Picture, bool>> expr = p => p.Category.Type == categoryType && p.Owner.Id == userId;
+
+            if (categoryType == CategoryType.All)
             {
-                return Result<IEnumerable<PictureModel>>.Error("User not found");
+                expr = p => p.OwnerId == userId;
             }
 
-            var pictures = Mapper.Map<IEnumerable<PictureModel>>(user.Pictures);
+            var userPictures = await this.db.Pictures.Where(expr).ProjectTo<PictureModel>().ToListAsync();
 
-            var pictureIds = pictures.Select(p => p.Id);
+            return Result<IEnumerable<PictureModel>>.Success(userPictures);
 
-            var likesForPicures = await db.Likes
-                .Where(l => l.UserId == userId && pictureIds.Contains(l.PictureId))
-                .ToListAsync();
+            //Func<Picture, bool> func = p => p.Category.Type == categoryType;
 
-            foreach (var picture in pictures)
-            {
-                picture.IsLikedFromCurrentUser = likesForPicures.Any(lp => lp.PictureId == picture.Id);
-            }
+            //if (categoryType == CategoryType.All)
+            //{
+            //    func = p => true;
+            //}
 
-            return Result<IEnumerable<PictureModel>>.Success(pictures);
+            //var user = this.db.Users.Include(p => p.Pictures).ThenInclude(c => c.Category).FirstOrDefault(u => u.Id == userId);
+            //if (user == null)
+            //{
+            //    return Result<IEnumerable<PictureModel>>.Error("User not found");
+            //}
+
+            //var pictures = Mapper.Map<IEnumerable<PictureModel>>(user.Pictures.Where(func));
+
+            //var pictureIds = pictures.Select(p => p.Id);
+
+            //var likesForPicures = await db.Likes
+            //    .Where(l => l.UserId == userId && pictureIds.Contains(l.PictureId))
+            //    .ToListAsync();
+
+            //foreach (var picture in pictures)
+            //{
+            //    picture.IsLikedFromCurrentUser = likesForPicures.Any(lp => lp.PictureId == picture.Id);
+            //}
+
+            //return Result<IEnumerable<PictureModel>>.Success(pictures);
         }
 
         public async Task<Result<IEnumerable<PictureModel>>> GetUserPictures(string currentUserId, string userId)

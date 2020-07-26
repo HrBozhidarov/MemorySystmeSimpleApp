@@ -15,9 +15,12 @@
         private static IEnumerable<Category> GetData()
            => new List<Category>
            {
-                new Category{ Type = CategoryType.Fun},
+                new Category{ Type = CategoryType.Animal},
+                new Category{ Type = CategoryType.Education},
+                new Category{ Type = CategoryType.Love},
                 new Category{ Type = CategoryType.Nature},
-                new Category{ Type = CategoryType.Ugly},
+                new Category{ Type = CategoryType.Sport},
+                new Category{ Type = CategoryType.Travel},
            };
 
         public static IApplicationBuilder Initialize(this IApplicationBuilder app)

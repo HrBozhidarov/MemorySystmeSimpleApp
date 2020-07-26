@@ -2,8 +2,18 @@
 {
     public enum CategoryType
     {
-        Fun = 0,
-        Ugly = 1,
-        Nature = 2,
+        All = 0,
+
+        Love = 1,
+
+        Education = 2,
+
+        Travel = 3,
+
+        Sport = 4,
+
+        Nature = 5,
+
+        Animal = 6,
     }
 }

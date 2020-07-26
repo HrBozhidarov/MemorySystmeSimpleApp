@@ -1,10 +1,10 @@
 ﻿namespace MemorySystemApp.Data.Models
 {
-    public class CategoryPicture
+    public class Favorite
     {
-        public int CategoryId { get; set; }
+        public string UserId { get; set; }
 
-        public Category Category { get; set; }
+        public User User { get; set; }
 
         public int PictureId { get; set; }
 

@@ -9,6 +9,6 @@
     {
         public Task<Result<User>> Register(RegisterUserRequestModel model);
 
-        public Task<Result<string>> Login(LoginUserRequestModel model);
+        public Task<Result<LoginModel>> Login(LoginUserRequestModel model);
     }
 }

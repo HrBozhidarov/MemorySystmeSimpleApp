@@ -21,12 +21,16 @@ import { AuthorizedGuard } from './guards/authorized.guard';
 
 import { ToastrModule } from 'ngx-toastr';
 
+import {NgxPaginationModule} from 'ngx-pagination'; 
+
 import { MemoryCreateComponent } from './components/memory/memory-create/memory-create.component';
+import { MemoryDetailsComponent } from './components/memory/memory-details/memory-details/memory-details.component';
+import { MyMemoriesComponent } from './components/memory/my-memories/my-memories/my-memories.component';
+
 import { MemoryService } from './services/memory/memory.service';
 import { ShareAuthService } from './share/services/share-auth-service';
 import { IdentityService } from './services/identity/identity.service';
-import { MemoryDetailsComponent } from './components/memory/memory-details/memory-details/memory-details.component';
-import { MyMemoriesComponent } from './components/memory/my-memories/my-memories/my-memories.component';
+import { LocalStorageService } from './share/services/local-storage.service';
 
 @NgModule({
   declarations: [
@@ -44,6 +48,7 @@ import { MyMemoriesComponent } from './components/memory/my-memories/my-memories
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    NgxPaginationModule,
     ToastrModule.forRoot(),
     AppRoutingModule,
     ReactiveFormsModule,
@@ -54,6 +59,7 @@ import { MyMemoriesComponent } from './components/memory/my-memories/my-memories
     ShareAuthService,
     IdentityService,
     MemoryService,
+    LocalStorageService,
     AuthorizedGuard,
     {
       provide: HTTP_INTERCEPTORS,

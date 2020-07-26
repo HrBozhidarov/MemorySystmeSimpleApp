@@ -7,9 +7,9 @@
     {
         public Picture()
         {
-            this.CategoryPictures = new HashSet<CategoryPicture>();
             this.Comments = new HashSet<Comment>();
             this.Likes = new HashSet<Like>();
+            this.Favorites = new HashSet<Favorite>();
         }
 
         public int Id { get; set; }
@@ -24,10 +24,14 @@
 
         public User Owner { get; set; }
 
-        public IEnumerable<CategoryPicture> CategoryPictures { get; set; }
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
 
         public IEnumerable<Comment> Comments { get; set; }
 
         public IEnumerable<Like> Likes { get; set; }
+
+        public IEnumerable<Favorite> Favorites { get; set; }
     }
 }

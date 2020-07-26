@@ -18,6 +18,8 @@
 
     public class IdentityService : IIdentityService
     {
+        private const string DefaultProfileUrl = "https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png";
+
         private readonly UserManager<User> userManager;
         private readonly ApplicationSettings applicationSettings;
 
@@ -29,7 +31,7 @@
             this.applicationSettings = options.Value;
         }
 
-        public async Task<Result<string>> Login(LoginUserRequestModel model)
+        public async Task<Result<LoginModel>> Login(LoginUserRequestModel model)
         {
             if (model == null)
             {
@@ -39,16 +41,21 @@
             var user = await this.userManager.FindByNameAsync(model.Username);
             if (user == null)
             {
-                return Result<string>.Error("Username or password are invalid");
+                return Result<LoginModel>.Error("Username or password are invalid");
             }
 
             var validationResult = await this.userManager.CheckPasswordAsync(user, model.Password);
             if (!validationResult)
             {
-                return Result<string>.Error("Username or password are invalid");
+                return Result<LoginModel>.Error("Username or password are invalid");
             }
 
-            return Result<string>.Success(this.GenerateJwtToken(user));
+            return Result<LoginModel>.Success(
+                new LoginModel
+                {
+                    ProfileUrl = user.ProfileUrl,
+                    Token = this.GenerateJwtToken(user),
+                });
         }
 
         public async Task<Result<User>> Register(RegisterUserRequestModel model)
@@ -56,6 +63,15 @@
             if (model == null)
             {
                 throw new NullReferenceException(nameof(model));
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.ProfileUrl) && !Uri.IsWellFormedUriString(model.ProfileUrl, UriKind.RelativeOrAbsolute))
+            {
+                return Result<User>.Error("Invalid profile url");
+            }
+            else if (string.IsNullOrWhiteSpace(model.ProfileUrl))
+            {
+                model.ProfileUrl = DefaultProfileUrl;
             }
 
             var user = Mapper.Map<User>(model);

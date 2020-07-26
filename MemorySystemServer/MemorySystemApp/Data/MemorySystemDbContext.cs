@@ -18,26 +18,12 @@
 
         public DbSet<Comment> Comments { get; set; }
 
-        public DbSet<CategoryPicture> CategoryPictures { get; set; }
-
         public DbSet<Like> Likes { get; set; }
+
+        public DbSet<Favorite> Favorites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<CategoryPicture>().HasKey(e => new { e.CategoryId, e.PictureId });
-
-            builder.Entity<CategoryPicture>()
-                .HasOne(e => e.Category)
-                .WithMany(e => e.CategoryPictures)
-                .HasForeignKey(e => e.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CategoryPicture>()
-                .HasOne(e => e.Picture)
-                .WithMany(e => e.CategoryPictures)
-                .HasForeignKey(e => e.PictureId)
-                .OnDelete(DeleteBehavior.Restrict); ;
-
             builder.Entity<Like>().HasKey(e => new { e.UserId, e.PictureId });
 
             builder.Entity<Like>()
@@ -49,6 +35,20 @@
             builder.Entity<Like>()
                 .HasOne(e => e.Picture)
                 .WithMany(e => e.Likes)
+                .HasForeignKey(e => e.PictureId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Favorite>().HasKey(e => new { e.UserId, e.PictureId });
+
+            builder.Entity<Favorite>()
+                .HasOne(e => e.User)
+                .WithMany(e => e.Favorites)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Favorite>()
+                .HasOne(e => e.Picture)
+                .WithMany(e => e.Favorites)
                 .HasForeignKey(e => e.PictureId)
                 .OnDelete(DeleteBehavior.Restrict);
 

@@ -1,4 +1,39 @@
+nav {
+    background-color: #8aa6f8fc !important;
+    text-transform: uppercase;
+}
+
 .w-h-logo {
-    width: 150px;
-    height: 50px;
+    width: 85px;
+    height: 70px;
+    padding: 0px;
+}
+
+.nav-home {
+    border-left: 3px solid #ffffff;
+    border-radius: 40px;
+}
+
+.nav-logout {
+    color: #ffffff !important;
+}
+
+a {
+    /* font-weight: bold; */
+    color: #ffffff;
+    -webkit-transition: .3s all ease;
+	-moz-transition: .3s all ease;
+	transition: .3s all ease;
+}
+
+div ul li:hover a, i {
+    font-weight: bold;
+}
+
+div.dropdown-menu.dropdown-menu-right a {
+    color: #8aa6f8fc;
+}
+
+div.dropdown-menu.dropdown-menu-right a:hover {
+    background-color: aliceblue;
 }

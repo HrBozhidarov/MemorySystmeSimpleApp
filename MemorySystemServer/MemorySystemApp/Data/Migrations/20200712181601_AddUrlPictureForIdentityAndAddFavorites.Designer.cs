@@ -4,14 +4,16 @@ using MemorySystemApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MemorySystemApp.Data.Migrations
 {
     [DbContext(typeof(MemorySystemDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200712181601_AddUrlPictureForIdentityAndAddFavorites")]
+    partial class AddUrlPictureForIdentityAndAddFavorites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +34,21 @@ namespace MemorySystemApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("MemorySystemApp.Data.Models.CategoryPicture", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PictureId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoryId", "PictureId");
+
+                    b.HasIndex("PictureId");
+
+                    b.ToTable("CategoryPictures");
                 });
 
             modelBuilder.Entity("MemorySystemApp.Data.Models.Comment", b =>
@@ -97,9 +114,6 @@ namespace MemorySystemApp.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -112,8 +126,6 @@ namespace MemorySystemApp.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("OwnerId");
 
@@ -319,6 +331,21 @@ namespace MemorySystemApp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("MemorySystemApp.Data.Models.CategoryPicture", b =>
+                {
+                    b.HasOne("MemorySystemApp.Data.Models.Category", "Category")
+                        .WithMany("CategoryPictures")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MemorySystemApp.Data.Models.Picture", "Picture")
+                        .WithMany("CategoryPictures")
+                        .HasForeignKey("PictureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MemorySystemApp.Data.Models.Comment", b =>
                 {
                     b.HasOne("MemorySystemApp.Data.Models.User", "Owner")
@@ -366,12 +393,6 @@ namespace MemorySystemApp.Data.Migrations
 
             modelBuilder.Entity("MemorySystemApp.Data.Models.Picture", b =>
                 {
-                    b.HasOne("MemorySystemApp.Data.Models.Category", "Category")
-                        .WithMany("Pictures")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MemorySystemApp.Data.Models.User", "Owner")
                         .WithMany("Pictures")
                         .HasForeignKey("OwnerId")

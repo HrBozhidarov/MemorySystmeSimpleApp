@@ -7,7 +7,7 @@
     {
         public Category()
         {
-            this.CategoryPictures = new HashSet<CategoryPicture>();
+            this.Pictures = new HashSet<Picture>();
         }
 
         public int Id { get; set; }
@@ -15,6 +15,6 @@
         [Required]
         public CategoryType Type { get; set; }
 
-        public IEnumerable<CategoryPicture> CategoryPictures { get; set; }
+        public IEnumerable<Picture> Pictures { get; set; }
     }
 }

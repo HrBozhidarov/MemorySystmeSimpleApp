@@ -28,15 +28,15 @@
 
         [HttpGet]
         [Route(nameof(MyMemories))]
-        public async Task<ActionResult<Result<IEnumerable<PictureModel>>>> MyMemories()
+        public async Task<ActionResult<Result<IEnumerable<PictureModel>>>> MyMemories(string category)
         {
-            var a = await this.picturesService.GetOwnPictures(this.User.GetUserId());
-            if (a.IfHaveError)
+            var pictures = await this.picturesService.GetOwnPictures(this.User.GetUserId(), category);
+            if (pictures.IfHaveError)
             {
-                return NotFound(a);
+                return NotFound(pictures);
             }
 
-            return a;
+            return pictures;
         }
     }
 }

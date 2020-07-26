@@ -34,7 +34,7 @@ export class MemoryCreateComponent implements OnInit {
     this.memoryForm = this.fb.group({
       url: ['', Validators.required],
       description: [''],
-      type: [CategoryType.Fun]
+      type: [CategoryType.Love]
     });
   }
   

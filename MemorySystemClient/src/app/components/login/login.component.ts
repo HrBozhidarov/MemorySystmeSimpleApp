@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { IdentityService } from 'src/app/services/identity/identity.service';
+import { LocalStorageService } from 'src/app/share/services/local-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder, 
     private identityService: IdentityService,
+    private localStorageService: LocalStorageService,
     private router: Router) { }
 
   ngOnInit() {
@@ -34,9 +36,11 @@ export class LoginComponent implements OnInit {
         return;
     }
 
-    this.identityService.login(this.loginForm.value).subscribe(data => {
-      this.identityService.saveToken(data.data);
-      this.router.navigate(['/home'])
+    this.identityService.login(this.loginForm.value).subscribe(result => {
+      this.identityService.saveToken(result.data.token);
+      this.localStorageService.setItem('user-profile-picture', result.data.profileUrl);
+      
+      this.router.navigate(['/home']);
     })
   }
 }
